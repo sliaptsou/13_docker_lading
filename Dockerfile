@@ -1,5 +1,7 @@
 FROM golang:1.14.0-alpine3.11
 
+LABEL maintainer="mail@sliaptsou.dev"
+
 RUN mkdir /app
 COPY . /app/
 
