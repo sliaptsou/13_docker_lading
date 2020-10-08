@@ -1,0 +1,24 @@
+version: 2
+jobs:
+  build:
+    working_directory: $GOPATH/src/mypackage/myapp/
+    docker:
+      - image: circleci/golang:1.14.9
+    branches:
+      only:
+        - master
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: go get -d -v
+      - run:
+          name: Build application container
+          command: |
+            go build -ldflags='-w -s -extldflags "-static"' github.com/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME};;
+            docker build -t ${DOCKER_REPO}/${CIRCLE_PROJECT_REPONAME} .;
+
+      - run:
+          name: Run application in background
+          command: |
+            docker run ${DOCKER_REPO}/${CIRCLE_PROJECT_REPONAME}
+          background: true
