@@ -20,17 +20,5 @@ jobs:
       - run:
           name: Run application in background
           command: |
-            docker run -p 8090:8090 ${DOCKER_REPO}/${CIRCLE_PROJECT_REPONAME}
+            docker run -p sliaptsou/${CIRCLE_PROJECT_REPONAME}
           background: true
-
-      - run:
-          name: Run test curl
-          command: |
-            RES=$(curl -L -s -o /dev/null -w "%{http_code}" -X GET 'http://localhost:8090/health')
-            if [ $RES -eq 200 ]; then exit 0; else exit 1; fi
-      - deploy:
-          command: |
-            if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                docker login -u ${DOCKER_USER} -p ${DOCKER_PASS};
-                docker push ${DOCKER_REPO}/${CIRCLE_PROJECT_REPONAME};
-            fi
