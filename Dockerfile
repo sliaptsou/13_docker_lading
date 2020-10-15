@@ -50,6 +50,7 @@ COPY --from=builder /go/bin/hello /go/bin/hello
 
 # Use an unprivileged user.
 USER appuser:appuser
+EXPOSE 8090
 
 # Run the hello binary.
 ENTRYPOINT ["/go/bin/hello"]
